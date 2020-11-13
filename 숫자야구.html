@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <script src="./bootstrap/js/jquery.min.js"></script>
+    <script src="./bootstrap/js/popper.min.js"></script>
+    <script src="./bootstrap/js/bootstrap.min.js"></script>
+    <script src='./js/jquery.js'></script>
+</head>
+
+<body>
+
+    <div class="jumbotron mt-3 w-50">
+        <h1 class="d-flex justify-content-between mb-3 mt-3"><span
+                class="badge badge-success">Number</span><span><button type="button"
+                    class="badge btn btn-danger">reset</button></span></h1>
+
+        <input type="number" class="form-control-lg  form-control text-success mb-3 font-size display-1" id="number" name="number" value="123" min="111" max="999"></h1>
+        <h2 class="d-flex flex-row-reverse"><button type="button" id="submit" class="btn btn-success badge ">제출</button>
+        </h2>
+
+        <div id="M"></div>
+        <div id="answer" class="">
+            <ul id="answer ">
+            </ul>
+
+        </div>
+    </div>
+</body>
+<script>
+    var answer = [];
+    var txt = ""
+    $(document).ready(function () {
+        $("#M").text(set_answer())
+    })
+    $("#submit").click(function () {
+
+        $("#answer").append("<li class='p-2 text-white '>" + $("#number").val() + " " + play_game($("#number").val()) + "</li>");
+    })
+    function set_answer() {
+
+        let res = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+        for (let i = 0; i < 3; i++) {
+            let ans = Math.floor(Math.random() * (res.length));
+
+            answer.push(res[ans]);
+            res.splice(ans, 1)
+        }
+        this.answer = answer
+        return answer
+    }
+    function play_game(arr) {
+        let BALL = 0;
+        let ST = 0;
+        for (let x of answer) {
+            if (arr.indexOf(x) != -1) {
+                if (arr.indexOf(x) == answer.indexOf(x)) {
+                    ST++;
+                }
+                else {
+                    BALL++;
+                }
+            }
+        }
+        return [ST, BALL]
+    }
+
+
+</script>
+
+</html>

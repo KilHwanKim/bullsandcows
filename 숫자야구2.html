@@ -1,0 +1,202 @@
+Skip to content
+Search or jump to…
+
+Pull requests
+Issues
+Marketplace
+Explore
+ 
+@KilHwanKim 
+KilHwanKim
+/
+workspace
+Private
+1
+00
+Code
+Issues
+Pull requests
+Actions
+Projects
+Security
+Insights
+Settings
+workspace/과제/02_숫자야구/숫자야구2.html
+@KilHwanKim
+KilHwanKim workspase
+Latest commit ea13dcd 17 days ago
+ History
+ 1 contributor
+171 lines (149 sloc)  4.41 KB
+  
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='main.js'></script>
+    <style>
+        input {
+            width: 200px;
+            font-size: 50px;
+            color: cornflowerblue;
+            border: 1px solid cornflowerblue;
+        }
+
+        table {
+            border-collapse: collapse;
+            color: cornflowerblue;
+            font-size: 50px;
+        }
+
+        table,
+        tr {
+            border: 1px solid cornflowerblue;
+        }
+
+        td {
+            padding-right: 10px;
+        }
+
+        button {
+            color: white;
+            background-color: cornflowerblue;
+            border: none;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div>
+        <button type="button" id="game_reset">게임시작/리셋</button><br>
+        숫자입력:<input type="number" id="number1" value="1" min="1" max="9">
+        <input type="number" id="number2" value="2" min="1" max="9">
+        <input type="number" id="number3" value="3" min="1" max="9">
+        <button type="button" id="btn_insert">입력</button>
+    </div>
+    <div>
+        <table>
+            <tbody id="main"></tbody>
+
+        </table>
+        
+    </div>
+    <div id="time"></div>
+</body>
+<script>
+    let main = document.getElementById("main");
+    let time = document.getElementById("time");
+    var HIS = [];
+    var txt="";
+    var txt2="";
+    
+    function check_overlap(arr) {
+        if (Array.from(new Set(arr)).length != arr.length) { return false; }
+        else {
+            return true;
+        }
+    }
+    class Record {
+        constructor() {
+            let answer = [];
+            let start_time;
+            let end_time;
+            let attempt;
+            let history = [];
+            let his = { A: "", B: "" }
+            this.set_answer(3);
+            this.set_start_time();
+            this.attempt=0;
+        }
+        set_answer(idx) {
+            let answer = [];
+            let res = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+            for (let i = 0; i < 3; i++) {
+                let ans = Math.floor(Math.random() * (res.length));
+
+                answer.push(res[ans]);
+                res.splice(ans, 1)
+            }
+            this.answer = answer
+        }
+        set_start_time() {
+            this.start_time = new Date();
+        }
+        play_game(arr) {
+            let BALL = 0;
+            let ST = 0;
+            for (let x of this.answer) {
+                if (arr.indexOf(x) != -1) {
+                    if (arr.indexOf(x) == this.answer.indexOf(x)) {
+                        ST++;
+                    }
+                    else {
+                        BALL++;
+                    }
+                }
+            }
+            return [ST, BALL]
+        }
+        
+
+    }
+    var result = new Record();
+    console.log(result.answer);
+    document.getElementById("game_reset").addEventListener("click", function () {
+        HIS.push(result);
+        result.end_time = new Date();
+        result = new Record();
+        console.log(result.answer);
+        txt= "";
+        txt2="";
+        main.innerHTML = txt;
+        time.innerHTML = txt2;
+        console.log(HIS)
+    });
+    document.getElementById("btn_insert").addEventListener("click", function () {
+        let my_answer = [];
+        //answer 생성
+        for (let i = 0; i < 3; i++) {
+            my_answer.push(parseInt(document.getElementById("number" + (i + 1)).value));
+        }
+        
+        //중복체크
+        if (check_overlap(my_answer)) {
+            //중복 없음
+            result.attempt++;
+            let SB = result.play_game(my_answer);
+            console.log(result.attempt)
+            result.end_time = new Date();
+            txt += '<tr><td>' + result.attempt + '</td><td>회</td>';
+            txt += '<td>'
+            for (let x of my_answer) {
+                txt += x
+            }
+            txt += '</td>'
+            txt += '<td>' + SB[0] + "S" + SB[1] + 'B</td></tr>';
+            if(SB[0]==3){
+                txt2 = "정답"+(result.end_time-result.start_time)/1000+"초걸림";
+                
+            }
+            time.innerHTML = txt2;
+            main.innerHTML = txt;
+
+
+        }
+        else {
+            //중복 있음
+
+        }
+
+    });
+
+</script>
+
+</html>
